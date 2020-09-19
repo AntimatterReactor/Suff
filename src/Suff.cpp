@@ -33,6 +33,11 @@ void commandHandler(int argc, char *argv[])
     if (mode == "c"){
         outFile << cCompile(fileContent);
     }
+    else if (mode == "cpp")
+    {
+        outFile << cppCompile(fileContent);
+    }
+    
     outFile.close();
 }
 
