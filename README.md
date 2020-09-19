@@ -1,3 +1,5 @@
 # Suff
 
-An Compiler, for brainfuck.
+A Compiler, for brainfuck.
+
+Compiles to C.
