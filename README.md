@@ -2,7 +2,7 @@
 
 A Compiler, for brainfuck.
 
-Compiles to C.
+Compiles to C/C+=
 
 ## How to Use
 
