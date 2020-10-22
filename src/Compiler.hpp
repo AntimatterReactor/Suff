@@ -1,100 +1,68 @@
 #include <string>
+#include <vector>
 #include <iostream>
+#include "Token.hpp"
 
-#define string std::string
-
-string cCompile(string lines)
+std::string compileToC(std::vector<Token> lex)
 {
-    string returnValue = "char ptrVal[30000] = {0};\nunsigned int ptr = 0;\n";
-    size_t linesLength = lines.length();
-    for (size_t i = 0; i < linesLength; ++i)
+    std::string presult;
+    for (auto s : lex)
     {
-        switch (lines[i])
+        if (s.object == '>')
         {
-        case '+':
-            returnValue = returnValue + "++ptrVal[ptr];\n";
-            break;
-
-        case '-':
-            returnValue = returnValue + "--ptrVal[ptr];\n";
-            break;
-
-        case '>':
-            returnValue = returnValue + "++ptr;\n";
-            break;
-
-        case '<':
-            returnValue = returnValue + "--ptr;\n";
-            break;
-
-        case '.':
-            returnValue = returnValue + "putchar(ptrVal[ptr]);\n";
-            break;
-
-        case ',':
-            returnValue = returnValue + "ptrVal[ptr]=getchar();\n";
-            break;
-
-        case '[':
-            returnValue = returnValue + "while (ptrVal[ptr]) {\n";
-            break;
-
-        case ']':
-            returnValue = returnValue + "}\n";
-            break;
-
-        default:
-            break;
+            presult += "ptr += " + std::to_string(s.ocount);
+            presult += ";\n";
+        }
+        else if (s.object == '<')
+        {
+            presult += "ptr -= " + std::to_string(s.ocount);
+            presult += ";\n";
+        }
+        else if (s.object == '+')
+        {
+            presult += "ptv[ptr]+=" + std::to_string(s.ocount);
+            presult += ";\n";
+        }
+        else if (s.object == '-')
+        {
+            presult += "ptv[ptr] -= " + std::to_string(s.ocount);
+            presult += ";\n";
+        }
+        else if (s.object == '.')
+        {
+            for (size_t i = 0; i < s.ocount; i++)
+            {
+                presult += "putchar(ptv[ptr]);\n";
+            }
+        }
+        else if (s.object == ',')
+        {
+            for (size_t i = 0; i < s.ocount; i++)
+            {
+                presult += "ptv[ptr] = getchar();\n";
+            }
+        }
+        else if (s.object == '[')
+        {
+            for (size_t i = 0; i < s.ocount; i++)
+            {
+                presult += "while(ptv[ptr]){\n";
+            }
+        }
+        else if (s.object == ']')
+        {
+            for (size_t i = 0; i < s.ocount; i++)
+            {
+                presult += "}\n";
+            }
         }
     }
-    returnValue = "#include <stdio.h>\nint main(){\n" + returnValue + "}";
-    return returnValue;
-}
+    std::string result;
 
-string cppCompile(string lines)
-{
-    string returnValue = "char ptrVal[30000] = {0};\nunsigned int ptr = 0;\n";
-    size_t linesLength = lines.length();
-    for (size_t i = 0; i < linesLength; ++i)
-    {
-        switch (lines[i])
-        {
-        case '+':
-            returnValue = returnValue + "++ptrVal[ptr];\n";
-            break;
+    result += "int main(){\n\n";
+    result += "char ptv[30000] = {0};\nint ptr = 0;\n";
+    result += presult;
+    result += "\n}";
 
-        case '-':
-            returnValue = returnValue + "--ptrVal[ptr];\n";
-            break;
-
-        case '>':
-            returnValue = returnValue + "++ptr;\n";
-            break;
-
-        case '<':
-            returnValue = returnValue + "--ptr;\n";
-            break;
-
-        case '.':
-            returnValue = returnValue + "putchar(ptrVal[ptr]);\n";
-            break;
-
-        case ',':
-            returnValue = returnValue + "ptrVal[ptr]=getchar();\n";
-            break;
-
-        case '[':
-            returnValue = returnValue + "while (ptrVal[ptr]) {\n";
-            break;
-
-        case ']':
-            returnValue = returnValue + "}\n";
-            break;
-
-        default:
-            break;
-        }
-    }
-    returnValue = "#include <cstdio>\nint main(){\n" + returnValue + "}";
-    return returnValue;
+    return result;
 }
