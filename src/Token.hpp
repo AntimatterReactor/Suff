@@ -4,7 +4,7 @@
 struct Token
 {
     char object;
-    unsigned int ocount;
+    int ocount = 1;
 };
 
 #endif

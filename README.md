@@ -1,10 +1,13 @@
 # Suff
 
-A Compiler, for brainfuck.
+Suff is a brainfuck transpiler which transpiles _vannila_ brainfuck to c
 
-Compiles to C
+# How to Build
 
-## How to Use
+To build, first, you need a c compiler, any kind will (hopefully) do.
 
-1. open terminal
-2. syntax (path_to_sf)/sf.exe (file_name) (optional: output_to_file)
+Now, compile, the sf.cpp file, if you dont know how, see the compiler's documentation
+
+# How to Use
+
+To traspile the target (.bf) file, use the format of (path to the compiled suff.cpp) (path to the target file) (output file name (optional))

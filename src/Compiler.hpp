@@ -1,67 +1,66 @@
 #include <string>
 #include <vector>
-#include <iostream>
+#include <sstream>
 #include "Token.hpp"
+
 std::string compileToC(std::vector<Token> lex)
 {
-    std::string presult;
+    std::ostringstream result;
+
+    result << "#include <stdio.h>\n\n"
+           << "int main(){\nchar ptv[30000] = {0};\nint ptr = 0;\n";
+
     for (auto s : lex)
     {
         switch (s.object)
         {
         case '>':
-            presult += "ptr += " + std::to_string(s.ocount);
-            presult += ";\n";
+            result << "ptr += " << std::to_string(s.ocount) << ";\n";
             break;
 
         case '<':
-            presult += "ptr -= " + std::to_string(s.ocount);
-            presult += ";\n";
+            result << "ptr -= " << std::to_string(s.ocount) << ";\n";
             break;
 
         case '+':
-            presult += "ptv[ptr]+=" + std::to_string(s.ocount);
-            presult += ";\n";
+            result << "ptv[ptr]+=" << std::to_string(s.ocount) << ";\n";
             break;
 
         case '-':
-            presult += "ptv[ptr] -= " + std::to_string(s.ocount);
-            presult += ";\n";
+            result << "ptv[ptr] -= " << std::to_string(s.ocount) << ";\n";
             break;
 
         case '.':
             for (size_t i = 0; i < s.ocount; i++)
             {
-                presult += "putchar(ptv[ptr]);\n";
+                result << "putchar(ptv[ptr]);\n";
             }
             break;
 
         case ',':
             for (size_t i = 0; i < s.ocount; i++)
             {
-                presult += "ptv[ptr] = getchar();\n";
+                result << "ptv[ptr] = getchar();\n";
             }
             break;
 
         case '[':
             for (size_t i = 0; i < s.ocount; i++)
             {
-                presult += "while(ptv[ptr]){\n";
+                result << "while(ptv[ptr]){\n";
             }
             break;
 
         case ']':
             for (size_t i = 0; i < s.ocount; i++)
             {
-                presult += "}\n";
+                result << "}\n";
             }
             break;
         }
     }
 
-    std::string result;
-    sprintf(result.data(),
-            "int main(){\n\nchar ptv[30000] = {0};\nint ptr = 0;\n%s\n}",
-            presult);
-    return result;
+    result << "}";
+
+    return result.str();
 }

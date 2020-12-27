@@ -9,25 +9,21 @@
 int main(int argc, char *argv[])
 {
     std::vector<Token> lex;
+    std::string outputFileName;
     if (argc < 2)
     {
         printf("Usage: Suff.exe [file-path] [output-file-name].c");
         return 0;
     }
     else if (argc = 2)
-    {
-        lex = lexer(argv[1]);
-        std::ofstream fileout("a.c");
-        fileout << compileToC(lex);
-        fileout.close();
-    }
+        outputFileName = "a.c";
     else if (argc = 3)
-    {
-        lex = lexer(argv[1]);
-        std::ofstream fileout(argv[2]);
-        fileout << compileToC(lex);
-        fileout.close();
-    }
+        outputFileName = argv[2];
+
+    lex = lexer(argv[1]);
+    std::ofstream fileout(outputFileName);
+    fileout << compileToC(lex);
+    fileout.close();
 
     return 0;
 }
